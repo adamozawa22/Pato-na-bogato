@@ -18,10 +18,7 @@
             margin: 0;
             padding: 30px 20px;
             min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            overflow-x: hidden;
+            overflow: hidden;
             position: relative;
         }
 
@@ -33,6 +30,7 @@
             z-index: 0;
             opacity: 0.45;
             will-change: transform;
+            pointer-events: none;
         }
 
         .blob-1 {
@@ -79,20 +77,34 @@
             50%      { transform: translate(-30%, -60%) scale(1.3); }
         }
 
-        header, .tiles-container {
+        /* kontener na przeciągalne elementy - absolutne pozycjonowanie */
+        #canvas {
             position: relative;
+            width: 100%;
+            height: calc(100vh - 60px);
             z-index: 2;
         }
 
+        .draggable {
+            position: absolute;
+            cursor: grab;
+            user-select: none;
+            touch-action: none;
+        }
+
+        .draggable:active {
+            cursor: grabbing;
+        }
+
         header {
-            width: 100%;
-            max-width: 900px;
-            margin-bottom: 60px;
             border-radius: 22px;
             padding: 18px 26px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            gap: 40px;
+            width: 500px;
+            max-width: 90vw;
 
             /* szkło */
             background: rgba(255, 255, 255, 0.08);
@@ -139,6 +151,8 @@
             align-items: center;
             gap: 12px;
             font-size: 18px;
+            position: relative;
+            z-index: 2;
         }
 
         .logo-g {
@@ -155,115 +169,4 @@
         }
 
         .date-time {
-            text-align: right;
-            line-height: 1.3;
-        }
-
-        .date-time .time {
-            font-size: 28px;
-            font-weight: 600;
-            letter-spacing: 1px;
-        }
-
-        .date-time .date {
-            font-size: 13px;
-            opacity: 0.8;
-            text-transform: capitalize;
-        }
-
-        .tiles-container {
-            width: 100%;
-            max-width: 900px;
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 25px;
-        }
-
-        .tile {
-            position: relative;
-            overflow: hidden;
-            border-radius: 22px;
-            padding: 45px 25px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 14px;
-            text-decoration: none;
-            color: white;
-
-            /* szkło */
-            background: rgba(255, 255, 255, 0.08);
-            backdrop-filter: blur(18px) saturate(160%);
-            -webkit-backdrop-filter: blur(18px) saturate(160%);
-            border: 1px solid rgba(255, 255, 255, 0.25);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255,255,255,0.3);
-
-            transition: transform 0.3s ease, background 0.3s ease;
-        }
-
-        .tile:hover {
-            transform: translateY(-8px) scale(1.02);
-            background: rgba(255, 255, 255, 0.14);
-        }
-
-        .tile .icon {
-            font-size: 44px;
-            position: relative;
-            z-index: 2;
-        }
-
-        .tile .label {
-            font-size: 18px;
-            font-weight: 500;
-            letter-spacing: 0.5px;
-            position: relative;
-            z-index: 2;
-        }
-
-        .user-info, .date-time {
-            position: relative;
-            z-index: 2;
-        }
-    </style>
-</head>
-<body>
-
-    <div class="blob blob-1"></div>
-    <div class="blob blob-2"></div>
-    <div class="blob blob-3"></div>
-
-    <header>
-        <div class="user-info">
-            <div class="logo-g">G</div>
-            <span>Witaj, Fan</span>
-        </div>
-        <div class="date-time">
-            <div class="time" id="clock">--:--</div>
-            <div class="date" id="today">ładowanie...</div>
-        </div>
-    </header>
-
-    <div class="tiles-container">
-        <a href="https://instagram.com" class="tile">
-            <div class="icon">📸</div>
-            <div class="label">Instagram</div>
-        </a>
-        <a href="https://tiktok.com" class="tile">
-            <div class="icon">🎵</div>
-            <div class="label">TikTok</div>
-        </a>
-    </div>
-
-    <script>
-        function updateClock() {
-            const now = new Date();
-            document.getElementById('clock').textContent = now.toLocaleTimeString('pl-PL', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-            document.getElementById('today').textContent = now.toLocaleDateString('pl-PL', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
-        }
-        updateClock();
-        setInterval(updateClock, 1000);
-    </script>
-
-</body>
-</html>
+            text-align:
