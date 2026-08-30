@@ -13,8 +13,7 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(160deg, #1a4d2e 0%, #2e3b2e 45%, #0f2e1a 100%);
-            background-attachment: fixed;
+            background: linear-gradient(160deg, #0f2e1a 0%, #1a4d2e 50%, #0f2e1a 100%);
             color: white;
             margin: 0;
             padding: 30px 20px;
@@ -23,159 +22,47 @@
             flex-direction: column;
             align-items: center;
             overflow-x: hidden;
+            position: relative;
         }
 
-        /* delikatne kolorowe plamy w tle, żeby szkło miało co refraktować */
-        body::before,
-        body::after {
-            content: "";
+        /* Płynące, animowane plamy koloru w tle (liquid blobs) */
+        .blob {
             position: fixed;
             border-radius: 50%;
-            filter: blur(60px);
-            z-index: -1;
+            filter: blur(70px);
+            z-index: 0;
+            opacity: 0.45;
+            will-change: transform;
         }
 
-        body::before {
-            width: 400px;
-            height: 400px;
+        .blob-1 {
+            width: 420px;
+            height: 420px;
             background: #e1306c;
-            top: 10%;
-            left: -100px;
-            opacity: 0.35;
+            top: 5%;
+            left: -10%;
+            animation: float1 18s ease-in-out infinite;
         }
 
-        body::after {
-            width: 450px;
-            height: 450px;
+        .blob-2 {
+            width: 480px;
+            height: 480px;
             background: #25f4ee;
-            bottom: 5%;
-            right: -120px;
-            opacity: 0.3;
+            bottom: 0%;
+            right: -10%;
+            animation: float2 22s ease-in-out infinite;
         }
 
-        header.liquidGL {
-            width: 100%;
-            max-width: 900px;
-            margin-bottom: 60px;
-            border-radius: 22px;
-            z-index: 2;
+        .blob-3 {
+            width: 350px;
+            height: 350px;
+            background: #7cff6b;
+            top: 40%;
+            left: 40%;
+            animation: float3 26s ease-in-out infinite;
         }
 
-        header .content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 18px 26px;
-            position: relative;
-            z-index: 3;
-        }
-
-        .user-info {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-size: 18px;
-        }
-
-        .logo-g {
-            background: white;
-            color: #1a4d2e;
-            font-weight: bold;
-            font-size: 22px;
-            width: 42px;
-            height: 42px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            border-radius: 12px;
-        }
-
-        .date-time {
-            text-align: right;
-            line-height: 1.3;
-        }
-
-        .date-time .time {
-            font-size: 28px;
-            font-weight: 600;
-            letter-spacing: 1px;
-        }
-
-        .date-time .date {
-            font-size: 13px;
-            opacity: 0.8;
-            text-transform: capitalize;
-        }
-
-        .tiles-container {
-            width: 100%;
-            max-width: 900px;
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 25px;
-            z-index: 2;
-        }
-
-        .tile.liquidGL {
-            border-radius: 22px;
-            z-index: 2;
-            text-decoration: none;
-            color: white;
-        }
-
-        .tile .content {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 14px;
-            padding: 45px 25px;
-            position: relative;
-            z-index: 3;
-        }
-
-        .tile .icon {
-            font-size: 44px;
-        }
-
-        .tile .label {
-            font-size: 18px;
-            font-weight: 500;
-            letter-spacing: 0.5px;
-        }
-    </style>
-</head>
-<body>
-
-    <header class="liquidGL">
-        <div class="content">
-            <div class="user-info">
-                <div class="logo-g">G</div>
-                <span>Witaj, Fan</span>
-            </div>
-            <div class="date-time">
-                <div class="time" id="clock">--:--</div>
-                <div class="date" id="today">ładowanie...</div>
-            </div>
-        </div>
-    </header>
-
-    <div class="tiles-container">
-        <a href="https://instagram.com" class="tile liquidGL">
-            <div class="content">
-                <div class="icon">📸</div>
-                <div class="label">Instagram</div>
-            </div>
-        </a>
-        <a href="https://tiktok.com" class="tile liquidGL">
-            <div class="content">
-                <div class="icon">🎵</div>
-                <div class="label">TikTok</div>
-            </div>
-        </a>
-    </div>
-
-    <!-- html2canvas – wymagane przez liquidGL -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" defer></script>
-    <!-- liquidGL -->
-    <script src="https://cdn.jsdelivr.ne
+        @keyframes float1 {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33%      { transform: translate(120px, 80px) scale(1.15); }
+            66%      {
