@@ -7,9 +7,14 @@
     <style>
         * { box-sizing: border-box; }
 
+        html, body {
+            height: 100%;
+        }
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(160deg, #1f2a1f 0%, #2e3b2e 45%, #3c4d3c 100%);
+            background: linear-gradient(160deg, #1a4d2e 0%, #2e3b2e 45%, #0f2e1a 100%);
+            background-attachment: fixed;
             color: white;
             margin: 0;
             padding: 30px 20px;
@@ -17,15 +22,52 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            overflow-x: hidden;
         }
 
-        header {
+        /* delikatne kolorowe plamy w tle, żeby szkło miało co refraktować */
+        body::before,
+        body::after {
+            content: "";
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(60px);
+            z-index: -1;
+        }
+
+        body::before {
+            width: 400px;
+            height: 400px;
+            background: #e1306c;
+            top: 10%;
+            left: -100px;
+            opacity: 0.35;
+        }
+
+        body::after {
+            width: 450px;
+            height: 450px;
+            background: #25f4ee;
+            bottom: 5%;
+            right: -120px;
+            opacity: 0.3;
+        }
+
+        header.liquidGL {
             width: 100%;
             max-width: 900px;
+            margin-bottom: 60px;
+            border-radius: 22px;
+            z-index: 2;
+        }
+
+        header .content {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 50px;
+            padding: 18px 26px;
+            position: relative;
+            z-index: 3;
         }
 
         .user-info {
@@ -37,7 +79,7 @@
 
         .logo-g {
             background: white;
-            color: #2e3b2e;
+            color: #1a4d2e;
             font-weight: bold;
             font-size: 22px;
             width: 42px;
@@ -46,7 +88,6 @@
             justify-content: center;
             align-items: center;
             border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.25);
         }
 
         .date-time {
@@ -55,14 +96,14 @@
         }
 
         .date-time .time {
-            font-size: 30px;
+            font-size: 28px;
             font-weight: 600;
             letter-spacing: 1px;
         }
 
         .date-time .date {
-            font-size: 14px;
-            opacity: 0.75;
+            font-size: 13px;
+            opacity: 0.8;
             text-transform: capitalize;
         }
 
@@ -72,30 +113,29 @@
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 25px;
+            z-index: 2;
         }
 
-        .tile {
-            background: rgba(255,255,255,0.06);
-            border: 1px solid rgba(255,255,255,0.12);
-            backdrop-filter: blur(6px);
-            border-radius: 20px;
-            padding: 35px 25px;
+        .tile.liquidGL {
+            border-radius: 22px;
+            z-index: 2;
+            text-decoration: none;
+            color: white;
+        }
+
+        .tile .content {
             display: flex;
             flex-direction: column;
             align-items: center;
+            justify-content: center;
             gap: 14px;
-            text-decoration: none;
-            color: white;
-            transition: transform 0.2s ease, background 0.2s ease;
-        }
-
-        .tile:hover {
-            transform: translateY(-6px);
-            background: rgba(255,255,255,0.12);
+            padding: 45px 25px;
+            position: relative;
+            z-index: 3;
         }
 
         .tile .icon {
-            font-size: 42px;
+            font-size: 44px;
         }
 
         .tile .label {
@@ -103,49 +143,39 @@
             font-weight: 500;
             letter-spacing: 0.5px;
         }
-
-        .tile-ig .icon { color: #e1306c; }
-        .tile-tt .icon { color: #ffffff; }
     </style>
 </head>
 <body>
 
-    <header>
-        <div class="user-info">
-            <div class="logo-g">G</div>
-            <span>Witaj, Fan</span>
-        </div>
-        <div class="date-time">
-            <div class="time" id="clock">--:--</div>
-            <div class="date" id="today">ładowanie...</div>
+    <header class="liquidGL">
+        <div class="content">
+            <div class="user-info">
+                <div class="logo-g">G</div>
+                <span>Witaj, Fan</span>
+            </div>
+            <div class="date-time">
+                <div class="time" id="clock">--:--</div>
+                <div class="date" id="today">ładowanie...</div>
+            </div>
         </div>
     </header>
 
     <div class="tiles-container">
-        <a href="https://instagram.com" class="tile tile-ig">
-            <div class="icon">📸</div>
-            <div class="label">Instagram</div>
+        <a href="https://instagram.com" class="tile liquidGL">
+            <div class="content">
+                <div class="icon">📸</div>
+                <div class="label">Instagram</div>
+            </div>
         </a>
-        <a href="https://tiktok.com" class="tile tile-tt">
-            <div class="icon">🎵</div>
-            <div class="label">TikTok</div>
+        <a href="https://tiktok.com" class="tile liquidGL">
+            <div class="content">
+                <div class="icon">🎵</div>
+                <div class="label">TikTok</div>
+            </div>
         </a>
     </div>
 
-    <script>
-        function updateClock() {
-            const now = new Date();
-
-            const time = now.toLocaleTimeString('pl-PL', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-            const date = now.toLocaleDateString('pl-PL', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
-
-            document.getElementById('clock').textContent = time;
-            document.getElementById('today').textContent = date;
-        }
-
-        updateClock();
-        setInterval(updateClock, 1000);
-    </script>
-
-</body>
-</html>
+    <!-- html2canvas – wymagane przez liquidGL -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" defer></script>
+    <!-- liquidGL -->
+    <script src="https://cdn.jsdelivr.ne
