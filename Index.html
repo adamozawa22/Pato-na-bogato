@@ -1,450 +1,135 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Genzie Hub</title>
-    <style>
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Genzie Hub</title>
+<style>
+  :root {
+    --bg: #ffffff;
+    --fg: #0a0a0a;
+    --accent: #0a0a0a;
+    --muted: #6b6b6b;
+    --line: #0a0a0a;
+  }
 
-        html, body {
-            height: 100%;
-        }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0a0a0a;
+      --fg: #ffffff;
+      --accent: #ffffff;
+      --muted: #a0a0a0;
+      --line: #ffffff;
+    }
+  }
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(160deg, #0f2e1a 0%, #1a4d2e 50%, #0f2e1a 100%);
-            color: white;
-            margin: 0;
-            padding: 20px 16px;
-            min-height: 100vh;
-            overflow: hidden;
-            position: fixed;
-            width: 100%;
-        }
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
 
-        /* Płynące, animowane plamy koloru w tle */
-        .blob {
-            position: fixed;
-            border-radius: 50%;
-            filter: blur(70px);
-            z-index: 0;
-            opacity: 0.45;
-            will-change: transform;
-            pointer-events: none;
-        }
+  html, body {
+    height: 100%;
+  }
 
-        .blob-1 {
-            width: 420px;
-            height: 420px;
-            background: #e1306c;
-            top: 5%;
-            left: -10%;
-            animation: float1 18s ease-in-out infinite;
-        }
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 24px;
+    transition: background 0.3s ease, color 0.3s ease;
+  }
 
-        .blob-2 {
-            width: 480px;
-            height: 480px;
-            background: #25f4ee;
-            bottom: 0%;
-            right: -10%;
-            animation: float2 22s ease-in-out infinite;
-        }
+  .card {
+    max-width: 480px;
+    width: 100%;
+    text-align: center;
+  }
 
-        .blob-3 {
-            width: 350px;
-            height: 350px;
-            background: #7cff6b;
-            top: 40%;
-            left: 40%;
-            animation: float3 26s ease-in-out infinite;
-        }
+  .badge {
+    display: inline-block;
+    border: 1.5px solid var(--line);
+    border-radius: 999px;
+    padding: 6px 16px;
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 32px;
+    font-weight: 600;
+  }
 
-        @keyframes float1 {
-            0%, 100% { transform: translate(0, 0) scale(1); }
-            33%      { transform: translate(120px, 80px) scale(1.15); }
-            66%      { transform: translate(-40px, 140px) scale(0.9); }
-        }
+  h1 {
+    font-size: 42px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    margin-bottom: 20px;
+  }
 
-        @keyframes float2 {
-            0%, 100% { transform: translate(0, 0) scale(1); }
-            33%      { transform: translate(-100px, -60px) scale(0.9); }
-            66%      { transform: translate(-160px, 40px) scale(1.2); }
-        }
+  p {
+    font-size: 16px;
+    color: var(--muted);
+    line-height: 1.6;
+    margin-bottom: 40px;
+  }
 
-        @keyframes float3 {
-            0%, 100% { transform: translate(-50%, -50%) scale(1); }
-            50%      { transform: translate(-30%, -60%) scale(1.3); }
-        }
+  .divider {
+    width: 48px;
+    height: 2px;
+    background: var(--line);
+    margin: 0 auto 40px;
+  }
 
-        #canvas {
-            position: relative;
-            width: 100%;
-            height: calc(100vh - 40px);
-            z-index: 2;
-        }
+  .socials {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+  }
 
-        .draggable {
-            position: absolute;
-            cursor: grab;
-            user-select: none;
-            touch-action: none;
-        }
+  .socials a {
+    color: var(--fg);
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: 0.04em;
+    border: 1.5px solid var(--line);
+    border-radius: 10px;
+    padding: 12px 24px;
+    transition: background 0.2s ease, color 0.2s ease;
+  }
 
-        .draggable:active {
-            cursor: grabbing;
-        }
+  .socials a:hover {
+    background: var(--fg);
+    color: var(--bg);
+  }
 
-        header {
-            border-radius: 22px;
-            padding: 16px 22px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 24px;
-            width: 460px;
-            max-width: 92vw;
-
-            background: rgba(255, 255, 255, 0.08);
-            backdrop-filter: blur(18px) saturate(160%);
-            -webkit-backdrop-filter: blur(18px) saturate(160%);
-            border: 1px solid rgba(255, 255, 255, 0.25);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255,255,255,0.3);
-            overflow: hidden;
-        }
-
-        header::before,
-        .tile::before {
-            content: "";
-            position: absolute;
-            top: -50%;
-            left: -60%;
-            width: 60%;
-            height: 200%;
-            background: linear-gradient(
-                120deg,
-                transparent 0%,
-                rgba(255, 255, 255, 0.25) 45%,
-                rgba(255, 255, 255, 0.05) 55%,
-                transparent 100%
-            );
-            transform: rotate(20deg);
-            animation: sheen 7s ease-in-out infinite;
-            pointer-events: none;
-        }
-
-        .tile::before {
-            animation-duration: 9s;
-        }
-
-        @keyframes sheen {
-            0%   { left: -60%; }
-            50%  { left: 120%; }
-            100% { left: 120%; }
-        }
-
-        .user-info {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 16px;
-            position: relative;
-            z-index: 2;
-            white-space: nowrap;
-        }
-
-        .logo-g {
-            background: white;
-            color: #1a4d2e;
-            font-weight: bold;
-            font-size: 20px;
-            width: 38px;
-            height: 38px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            border-radius: 11px;
-            flex-shrink: 0;
-        }
-
-        .date-time {
-            text-align: right;
-            line-height: 1.25;
-            position: relative;
-            z-index: 2;
-        }
-
-        .date-time .time {
-            font-size: 22px;
-            font-weight: 600;
-            letter-spacing: 0.5px;
-        }
-
-        .date-time .date {
-            font-size: 11px;
-            opacity: 0.8;
-            text-transform: capitalize;
-        }
-
-        .tile {
-            position: absolute;
-            overflow: hidden;
-            border-radius: 22px;
-            padding: 30px 20px;
-            width: 160px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-            text-decoration: none;
-            color: white;
-
-            background: rgba(255, 255, 255, 0.08);
-            backdrop-filter: blur(18px) saturate(160%);
-            -webkit-backdrop-filter: blur(18px) saturate(160%);
-            border: 1px solid rgba(255, 255, 255, 0.25);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255,255,255,0.3);
-
-            transition: background 0.3s ease;
-        }
-
-        .tile:hover {
-            background: rgba(255, 255, 255, 0.14);
-        }
-
-        .tile .icon {
-            width: 42px;
-            height: 42px;
-            position: relative;
-            z-index: 2;
-            pointer-events: none;
-        }
-
-        .tile .icon svg {
-            width: 100%;
-            height: 100%;
-            display: block;
-        }
-
-        .tile .label {
-            font-size: 16px;
-            font-weight: 500;
-            letter-spacing: 0.3px;
-            position: relative;
-            z-index: 2;
-            pointer-events: none;
-        }
-
-        .hint {
-            position: fixed;
-            bottom: 10px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 11px;
-            opacity: 0.45;
-            z-index: 2;
-            white-space: nowrap;
-        }
-
-        /* --- Telefon --- */
-        @media (max-width: 600px) {
-            body {
-                padding: 14px 10px;
-            }
-
-            header {
-                width: 94vw;
-                padding: 12px 16px;
-                border-radius: 18px;
-                gap: 12px;
-            }
-
-            .user-info {
-                font-size: 13px;
-                gap: 8px;
-            }
-
-            .logo-g {
-                width: 32px;
-                height: 32px;
-                font-size: 16px;
-                border-radius: 9px;
-            }
-
-            .date-time .time {
-                font-size: 17px;
-            }
-
-            .date-time .date {
-                font-size: 9.5px;
-            }
-
-            .tile {
-                width: 130px;
-                padding: 22px 14px;
-                border-radius: 18px;
-                gap: 8px;
-            }
-
-            .tile .icon {
-                width: 34px;
-                height: 34px;
-            }
-
-            .tile .label {
-                font-size: 13px;
-            }
-
-            .blob {
-                filter: blur(45px);
-            }
-
-            .blob-1, .blob-2 { width: 260px; height: 260px; }
-            .blob-3 { width: 200px; height: 200px; }
-
-            .hint {
-                font-size: 10px;
-            }
-        }
-    </style>
+  footer {
+    margin-top: 56px;
+    font-size: 12px;
+    color: var(--muted);
+    letter-spacing: 0.04em;
+  }
+</style>
 </head>
 <body>
+  <div class="card">
+    <div class="badge">Zamknięte</div>
+    <h1>Genzie Hub<br>koniec</h1>
+    <p>Strona nie działa i nie będzie. Ogarniecie nas tu:</p>
 
-    <div class="blob blob-1"></div>
-    <div class="blob blob-2"></div>
-    <div class="blob blob-3"></div>
+    <div class="divider"></div>
 
-    <div id="canvas">
-        <header class="draggable" id="header" style="top: 16px; left: 50%; transform: translateX(-50%);">
-            <div class="user-info">
-                <div class="logo-g">G</div>
-                <span>Witaj, Fan</span>
-            </div>
-            <div class="date-time">
-                <div class="time" id="clock">--:--</div>
-                <div class="date" id="today">ładowanie...</div>
-            </div>
-        </header>
-
-        <a href="https://instagram.com" class="tile draggable" id="tile-ig" style="top: 40%; left: 22%;">
-            <div class="icon">
-                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <defs>
-                        <radialGradient id="igGradient" cx="30%" cy="107%" r="150%">
-                            <stop offset="0%" stop-color="#fdf497"/>
-                            <stop offset="5%" stop-color="#fdf497"/>
-                            <stop offset="45%" stop-color="#fd5949"/>
-                            <stop offset="60%" stop-color="#d6249f"/>
-                            <stop offset="90%" stop-color="#285AEB"/>
-                        </radialGradient>
-                    </defs>
-                    <rect x="1" y="1" width="22" height="22" rx="6" fill="url(#igGradient)"/>
-                    <rect x="6.5" y="6.5" width="11" height="11" rx="3.5" fill="none" stroke="white" stroke-width="1.6"/>
-                    <circle cx="12" cy="12" r="3.2" fill="none" stroke="white" stroke-width="1.6"/>
-                    <circle cx="17.4" cy="6.6" r="1.1" fill="white"/>
-                </svg>
-            </div>
-            <div class="label">Instagram</div>
-        </a>
-
-        <a href="https://tiktok.com" class="tile draggable" id="tile-tt" style="top: 40%; left: 58%;">
-            <div class="icon">
-                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <rect x="1" y="1" width="22" height="22" rx="6" fill="#010101"/>
-                    <path fill="#25F4EE" d="M14.9 5.2c.5 1.4 1.6 2.5 3 2.9v1.9c-1.1 0-2.1-.3-3-.9v4.6c0 2.3-1.9 4.2-4.2 4.2s-4.2-1.9-4.2-4.2 1.9-4.2 4.2-4.2c.2 0 .5 0 .7.1v2c-.2-.1-.5-.1-.7-.1-1.2 0-2.2 1-2.2 2.2s1 2.2 2.2 2.2 2.2-1 2.2-2.2V4.3h2z" transform="translate(-0.15,0)"/>
-                    <path fill="#FE2C55" d="M15.4 5.2c.5 1.4 1.6 2.5 3 2.9v1.9c-1.1 0-2.1-.3-3-.9v4.6c0 2.3-1.9 4.2-4.2 4.2s-4.2-1.9-4.2-4.2 1.9-4.2 4.2-4.2c.2 0 .5 0 .7.1v2c-.2-.1-.5-.1-.7-.1-1.2 0-2.2 1-2.2 2.2s1 2.2 2.2 2.2 2.2-1 2.2-2.2V4.3h2z" transform="translate(0.15,0)"/>
-                    <path fill="white" d="M15.15 5.2c.5 1.4 1.6 2.5 3 2.9v1.9c-1.1 0-2.1-.3-3-.9v4.6c0 2.3-1.9 4.2-4.2 4.2s-4.2-1.9-4.2-4.2 1.9-4.2 4.2-4.2c.2 0 .5 0 .7.1v2c-.2-.1-.5-.1-.7-.1-1.2 0-2.2 1-2.2 2.2s1 2.2 2.2 2.2 2.2-1 2.2-2.2V4.3h2z"/>
-                </svg>
-            </div>
-            <div class="label">TikTok</div>
-        </a>
+    <div class="socials">
+      <a href="https://www.instagram.com/melanz.onlinemess/" target="_blank" rel="noopener">Instagram</a>
+      <a href="https://www.tiktok.com/@melanz.onlinemess" target="_blank" rel="noopener">TikTok</a>
     </div>
 
-    <div class="hint">przeciągnij kafelki ✋</div>
 
-    <script>
-        function updateClock() {
-            const now = new Date();
-            document.getElementById('clock').textContent = now.toLocaleTimeString('pl-PL', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-            document.getElementById('today').textContent = now.toLocaleDateString('pl-PL', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
-        }
-        updateClock();
-        setInterval(updateClock, 1000);
-
-        function makeDraggable(el) {
-            let offsetX = 0, offsetY = 0, isDragging = false;
-            let clickThreshold = 5;
-            let startX = 0, startY = 0;
-            let moved = false;
-
-            function onPointerDown(clientX, clientY) {
-                const rect = el.getBoundingClientRect();
-                el.style.transform = 'none';
-                const canvasRect = document.getElementById('canvas').getBoundingClientRect();
-                offsetX = clientX - rect.left;
-                offsetY = clientY - rect.top;
-                startX = clientX;
-                startY = clientY;
-                moved = false;
-                isDragging = true;
-                el.style.left = (rect.left - canvasRect.left) + 'px';
-                el.style.top = (rect.top - canvasRect.top) + 'px';
-                el.style.zIndex = 100;
-            }
-
-            function onPointerMove(clientX, clientY) {
-                if (!isDragging) return;
-                if (Math.abs(clientX - startX) > clickThreshold || Math.abs(clientY - startY) > clickThreshold) {
-                    moved = true;
-                }
-                const canvasRect = document.getElementById('canvas').getBoundingClientRect();
-                let newLeft = clientX - canvasRect.left - offsetX;
-                let newTop = clientY - canvasRect.top - offsetY;
-
-                newLeft = Math.max(0, Math.min(newLeft, canvasRect.width - el.offsetWidth));
-                newTop = Math.max(0, Math.min(newTop, canvasRect.height - el.offsetHeight));
-
-                el.style.left = newLeft + 'px';
-                el.style.top = newTop + 'px';
-            }
-
-            function onPointerUp(e) {
-                if (isDragging && moved) {
-                    e && e.preventDefault && e.preventDefault();
-                }
-                isDragging = false;
-                el.style.zIndex = '';
-            }
-
-            el.addEventListener('mousedown', (e) => {
-                e.preventDefault();
-                onPointerDown(e.clientX, e.clientY);
-            });
-            document.addEventListener('mousemove', (e) => onPointerMove(e.clientX, e.clientY));
-            document.addEventListener('mouseup', () => onPointerUp());
-
-            el.addEventListener('touchstart', (e) => {
-                const t = e.touches[0];
-                onPointerDown(t.clientX, t.clientY);
-            }, { passive: true });
-            document.addEventListener('touchmove', (e) => {
-                if (!isDragging) return;
-                const t = e.touches[0];
-                onPointerMove(t.clientX, t.clientY);
-            }, { passive: true });
-            document.addEventListener('touchend', () => onPointerUp());
-
-            el.addEventListener('click', (e) => {
-                if (moved) {
-                    e.preventDefault();
-                }
-            });
-        }
-
-        document.querySelectorAll('.draggable').forEach(makeDraggable);
-    </script>
-
+  </div>
 </body>
 </html>
