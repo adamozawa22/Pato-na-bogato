@@ -103,14 +103,8 @@
         /* Konkretne style kafelków */
         .tile-large { grid-column: span 2; grid-row: span 2; }
         .tile-wide { grid-column: span 2; }
-        
+
         .tile-maps { background-color: white; color: #333; } /* Biały kafelek mapy */
-        .tile-genzie-photo { background-color: #79ac79; padding: 0; position: relative; overflow: hidden;}
-        .tile-genzie-photo img { width: 100%; height: 100%; object-fit: cover;}
-        .tile-genzie-photo .text-overlay {
-            position: absolute; bottom: 10px; left: 10px; right: 10px;
-            background: rgba(0,0,0,0.6); padding: 10px; text-align: center;
-        }
 
         .tile-google { background-color: #8cbd8c; }
         .tile-google input {
@@ -155,32 +149,26 @@
     <div class="main-container">
         <nav>
             <a href="index.html">GŁÓWNA</a>
-            <a href="kim-jestesmy.html">CZŁONKOWIE</a>
-            <a href="zdjecia.html">ZDJĘCIA</a>
             <a href="spotkania.html">SPOTKANIA</a>
             <a href="informacje.html">INFORMACJE</a>
             <a href="wyloguj.html">WYLOGUJ</a>
         </nav>
 
         <div class="tiles-container">
-            <!-- Kafelek ze zdjęciem grupowym -->
-            <div class="tile tile-large tile-genzie-photo">
-                <img src="zdjecia/glowne.jpg" alt="Ekipa Genzie">
-                <div class="text-overlay">
-                    Genzie Hub - Twoje Centrum
-                </div>
-            </div>
-
             <!-- Kafelek Google -->
-            <div class="tile tile-google">
+            <div class="tile tile-google tile-wide">
                 <div style="font-size: 24px;">Google</div>
                 <input type="text" placeholder="Szukaj w Genzie...">
             </div>
 
             <!-- Kafelki dolnego rzędu -->
-            <a href="kim-jestesmy.html" class="tile">
-                <div style="font-size: 32px;">👥</div>
-                <div>Członkowie: 8 osób</div>
+            <a href="https://instagram.com" class="tile">
+                <div style="font-size: 32px;">📸</div>
+                <div>Instagram</div>
+            </a>
+            <a href="https://snapchat.com" class="tile">
+                <div style="font-size: 32px;">👻</div>
+                <div>Snapchat</div>
             </a>
             <a href="https://youtube.com" class="tile">
                 <div style="font-size: 32px;">▶️</div>
